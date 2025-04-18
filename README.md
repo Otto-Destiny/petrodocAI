@@ -280,7 +280,7 @@ The `OilGasDocumentAnalyzer` uses the `google-generativeai` Python library to in
 
 <p align="center">
   <a href="https://console.cloud.google.com/apis/credentials">
-    <img src="https://images.app.goo.gl/Ym2fPShx7fbW3ZNq8" alt="Example API Key Generation in Google AI Studio" width="600">
+    <img src="/image-70.png" alt="Example API Key Generation in Google AI Studio" width="600">
   </a>
   <br/><em>(Illustrative example of API key generation interface in Google AI Studio)</em>
 </p>
