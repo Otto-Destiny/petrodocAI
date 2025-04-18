@@ -705,11 +705,11 @@ Set the following environment variables in Heroku dashboard:
 
 ---
 
-## Model Costs Analysis (Estimates)
+## Model Cost Analysis (Estimates)
 
 This section provides a cost analysis for the cloud-based AI services potentially used by the PetroSight Analyzer (`FileParser` and `OilGasDocumentAnalyzer`).
 
-### **🚨 IMPORTANT NOTES 🚨**
+### **Important Notes**
 
 * **Estimate Only:** This is a **rough estimate** based on numerous assumptions about API usage and publicly available pricing. **Actual costs WILL vary.**
 * **Pricing Volatility:** Cloud provider pricing changes. These estimates use pricing data inferred around **mid-April 2025**. Always consult the official pricing pages for Google Cloud (Vertex AI, Document AI, Vision AI, Storage, Drive) for current rates in your region.
