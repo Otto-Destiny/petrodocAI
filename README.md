@@ -1,4 +1,4 @@
-# Documenation for PetroDoc AI
+# Technical Documenation
 # PetroDoc AI: Intelligent Oil & Gas Document Pipeline
 
 <p align="center">
