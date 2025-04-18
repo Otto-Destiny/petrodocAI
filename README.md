@@ -1,8 +1,8 @@
-### Technical Documenation
+###  Technical Documentation
 # PetroDoc AI: Intelligent Oil & Gas Document Pipeline
 
 <p align="center">
-  <strong>Automated Processing of Oil and Gas Files using AI.</strong>
+  <strong>Unlock insights from your Oil & Gas documents with an AI-powered pipeline.</strong>
 </p>
 
 <p align="center">
@@ -67,19 +67,23 @@ This system comprises two core Python modules:
   * [Buildpacks & Aptfile](#buildpacks--aptfile)
   * [Limitations & Considerations](#limitations--considerations)
 
-* [Model Cost Analysis](#model-cost-analysis)
-  * [Note](#notes)
-  * [1. Approach: File Type Categorization](#approach)
-  * [2. Scenarios Assumptions ](#scenarios-assumptions)
-  * [3. Cost Calculation Breakdown](#cost-calculation-breakdown)
-  * [4. Summary Table](#summary-table)
+* [Model Cost Analysis (Estimates)](#model-cost-analysis-estimates)
+  * [Important Notes](#important-notes)
+  * [Approach: File Type Categorization](#approach-file-type-categorization)
+  * [Scenario Assumptions ](#scenario-assumptions)
+  * [Cost Calculation Breakdown](#cost-calculation-breakdown)
+  * [Summary Table](#summary-table)
+  * [Conclusion](#conclusion)
+  
 
 
 * [Critical Recommendations & Best Practices](#critical-recommendations--best-practices)
   * [Asynchronous Processing](#asynchronous-processing)
+  * [Scalable Caching](#scalable-caching)
   * [Scalable File Storage](#scalable-file-storage)
   * [Configuration Management](#configuration-management)
   * [Security Considerations](#security-considerations)
+  * [Testing Strategy](#testing-strategy)
   * [Database Optimization](#database-optimization)
   * [Resource Management](#resource-management)
 * [Troubleshooting](#troubleshooting)
@@ -140,7 +144,7 @@ This project leverages a carefully selected stack to balance performance, accura
   * **React:** Leading JavaScript library for building dynamic, interactive user interfaces.
 * **Deployment Target:**
   * **Heroku:** Popular PaaS providing managed infrastructure for web apps and workers, simplifying deployment.
-* **Recommended Enhancement Stack:**
+* **(Recommended) Enhancement Stack:**
   * **Redis:** High-performance in-memory cache and message broker.
   * **Celery:** Distributed task queue for asynchronous background processing.
   * **AWS S3:** Cloud object storage service.
@@ -276,7 +280,7 @@ The `OilGasDocumentAnalyzer` uses the `google-generativeai` Python library to in
 
 <p align="center">
   <a href="https://console.cloud.google.com/apis/credentials">
-    <img src="image\image-70.png"" alt="Example API Key Generation in Google AI Studio" width="600">
+    <img src="https://images.app.goo.gl/Ym2fPShx7fbW3ZNq8" alt="Example API Key Generation in Google AI Studio" width="600">
   </a>
   <br/><em>(Illustrative example of API key generation interface in Google AI Studio)</em>
 </p>
@@ -584,7 +588,7 @@ This original pipeline involved multiple stages of verification and fallback, pa
 ### Data Flow
 ---
 
-**Recommended Document Upload Flow:**
+**Document Upload Flow:**
    - User selects document in React frontend
    - Frontend uploads document via API to Django backend
    - Django creates Document model instance
@@ -698,19 +702,20 @@ Set the following environment variables in Heroku dashboard:
    * Heroku Redis (caching and Celery broker)
    * Consider Papertrail or LogDNA for log management
 
+
 ---
 
 ## Model Costs Analysis (Estimates)
 
-This section provides a cost analysis for the cloud-based AI services potentially used by the PetroDoc AI (`FileParser` and `OilGasDocumentAnalyzer`).
+This section provides a cost analysis for the cloud-based AI services potentially used by the PetroSight Analyzer (`FileParser` and `OilGasDocumentAnalyzer`).
 
-**🚨 IMPORTANT DISCLAIMERS 🚨**
+### **🚨 IMPORTANT NOTES 🚨**
 
 * **Estimate Only:** This is a **rough estimate** based on numerous assumptions about API usage and publicly available pricing. **Actual costs WILL vary.**
 * **Pricing Volatility:** Cloud provider pricing changes. These estimates use pricing data inferred around **mid-April 2025**. Always consult the official pricing pages for Google Cloud (Vertex AI, Document AI, Vision AI, Storage, Drive) for current rates in your region.
 * **Infrastructure Costs Excluded:** This analysis focuses *only* on potential per-use API costs. It does **not** include costs for hosting (e.g., Heroku dynos), databases (e.g., PostgreSQL for Django, managed ChromaDB if applicable), Redis cache, GCS/S3 storage fees.
 
-**1. Approach: File Type Categorization**
+### **Approach: File Type Categorization**
 
 For purpose of costs estimation, we categorize files based on their likely API consumption during parsing and analysis:
 
@@ -724,7 +729,7 @@ For purpose of costs estimation, we categorize files based on their likely API c
     * *Examples:* `.doc`, `.docx`, `.ppt`, `.pptx`, `.xls`. Text-based `.pdf` where local extraction might fail.
     * *API Usage:* Attempts local/direct parsing first. If that fails or yields poor results, **may fall back** to cloud APIs (e.g., Google Drive/Docs conversion followed by OCR via `parse_pdf`). API cost is incurred *only* if the fallback is triggered. Analysis (LLM + Embedding) occurs regardless.
 
-**2. Scenario Assumptions**
+### **Scenario Assumptions**
 
 * **Services Used:** Google Cloud Platform
     * OCR: Document AI OCR Processor
@@ -747,7 +752,7 @@ For purpose of costs estimation, we categorize files based on their likely API c
     * Vertex AI Gemini 2.0 Flash Output: $0.000075 per 1k characters
     * Vertex AI Embedding Input: $0.000025 per 1k characters (Estimate)
 
-**3. Cost Calculation Breakdown**
+### **Cost Calculation Breakdown**
 
 * **Cost per API-Intensive Page** (Used in Type II & Type III Fallback):
     * OCR: $0.0015
@@ -776,7 +781,7 @@ For purpose of costs estimation, we categorize files based on their likely API c
     * Type III Cost: 200 files * $0.00144/file = $0.288
     * **Total Estimated API Cost:** $0.045 + $5.765 + $0.288 = **~$6.10**
 
-**4. Summary Table (Hypothetical Estimate)**
+### **Summary Table**
 
 | Item                       | Est. API Cost (USD) | Key Assumptions (Mid-April 2025 Pricing Estimates)                                     |
 | :------------------------- | :------------------ | :------------------------------------------------------------------------------------- |
@@ -786,7 +791,7 @@ For purpose of costs estimation, we categorize files based on their likely API c
 | **Per File (Type III)** | ~$0.00144           | Avg. cost assuming 20% require fallback (4 pages API intensive), 80% don't (Type I cost). |
 | **1,000 Files (Example Mix)** | **~$6.10** | 300 Type I, 500 Type II, 200 Type III files.                                           |
 
-**5. Conclusion and Required Actions**
+### **Conclusion**
 
 This estimate, using the cost-effective Gemini 2.0 Flash model, suggests that API costs might be relatively low under these specific usage patterns and file type distributions. However, costs could increase significantly if:
 * A more powerful (and expensive) LLM like Gemini-2.5 Pro was used.
@@ -800,7 +805,8 @@ This estimate, using the cost-effective Gemini 2.0 Flash model, suggests that AP
  * **Vertex AI Pricing (GenAI - Covers Gemini & Embeddings):** [cloud.google.com/vertex-ai/generative-ai/pricing](https://cloud.google.com/vertex-ai/generative-ai/pricing)
  * **Gemini API Pricing (Consumer/AI Studio Key):** [ai.google.dev/gemini-api/docs/pricing](https://ai.google.dev/gemini-api/docs/pricing)
 
----
+**Disclaimer: Prices were given as of 16th April 2025.**
+
 
 ## Critical Recommendations & Best Practices
 
@@ -942,4 +948,6 @@ Guidelines for contributing to PetroDoc AI:
 ##
 ## License
 
-Copyright © 2025 · Right-Click Solutions · All Rights Reserved
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+[def]: #summary-table
