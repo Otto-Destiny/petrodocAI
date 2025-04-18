@@ -1,8 +1,8 @@
-###  Technical Documentation
+### Technical Documentation
 # PetroDoc AI: Intelligent Oil & Gas Document Pipeline
 
 <p align="center">
-  <strong>Unlock insights from your Oil & Gas documents with an AI-powered pipeline.</strong>
+  <strong>Automated Processing of Oil and Gas Files using AI.</strong>
 </p>
 
 <p align="center">
@@ -74,16 +74,13 @@ This system comprises two core Python modules:
   * [Cost Calculation Breakdown](#cost-calculation-breakdown)
   * [Summary Table](#summary-table)
   * [Conclusion](#conclusion)
-  
 
 
 * [Critical Recommendations & Best Practices](#critical-recommendations--best-practices)
   * [Asynchronous Processing](#asynchronous-processing)
-  * [Scalable Caching](#scalable-caching)
   * [Scalable File Storage](#scalable-file-storage)
   * [Configuration Management](#configuration-management)
   * [Security Considerations](#security-considerations)
-  * [Testing Strategy](#testing-strategy)
   * [Database Optimization](#database-optimization)
   * [Resource Management](#resource-management)
 * [Troubleshooting](#troubleshooting)
@@ -144,7 +141,7 @@ This project leverages a carefully selected stack to balance performance, accura
   * **React:** Leading JavaScript library for building dynamic, interactive user interfaces.
 * **Deployment Target:**
   * **Heroku:** Popular PaaS providing managed infrastructure for web apps and workers, simplifying deployment.
-* **(Recommended) Enhancement Stack:**
+* **Recommended Enhancement Stack:**
   * **Redis:** High-performance in-memory cache and message broker.
   * **Celery:** Distributed task queue for asynchronous background processing.
   * **AWS S3:** Cloud object storage service.
@@ -280,7 +277,7 @@ The `OilGasDocumentAnalyzer` uses the `google-generativeai` Python library to in
 
 <p align="center">
   <a href="https://console.cloud.google.com/apis/credentials">
-    <img src="/image-70.png" alt="Example API Key Generation in Google AI Studio" width="600">
+    <img src="image\image-70.png"" alt="Example API Key Generation in Google AI Studio" width="600">
   </a>
   <br/><em>(Illustrative example of API key generation interface in Google AI Studio)</em>
 </p>
@@ -588,7 +585,7 @@ This original pipeline involved multiple stages of verification and fallback, pa
 ### Data Flow
 ---
 
-**Document Upload Flow:**
+**Recommended Document Upload Flow:**
    - User selects document in React frontend
    - Frontend uploads document via API to Django backend
    - Django creates Document model instance
@@ -655,7 +652,6 @@ Set the following environment variables in Heroku dashboard:
 1. **Essential**:
    * `SECRET_KEY`: Django secret key
    * `GEMINI_API_KEY`: Google Gemini API key
-   * `GOOGLE_APPLICATION_CREDENTIALS_CONTENT`: Base64-encoded GCP service account JSON
    * `GCS_BUCKET_NAME`: Google Cloud Storage bucket name
    * `AWS_ACCESS_KEY_ID`: For S3 storage
    * `AWS_SECRET_ACCESS_KEY`: For S3 storage
@@ -701,7 +697,6 @@ Set the following environment variables in Heroku dashboard:
    * Heroku PostgreSQL (database)
    * Heroku Redis (caching and Celery broker)
    * Consider Papertrail or LogDNA for log management
-
 
 ---
 
@@ -805,8 +800,7 @@ This estimate, using the cost-effective Gemini 2.0 Flash model, suggests that AP
  * **Vertex AI Pricing (GenAI - Covers Gemini & Embeddings):** [cloud.google.com/vertex-ai/generative-ai/pricing](https://cloud.google.com/vertex-ai/generative-ai/pricing)
  * **Gemini API Pricing (Consumer/AI Studio Key):** [ai.google.dev/gemini-api/docs/pricing](https://ai.google.dev/gemini-api/docs/pricing)
 
-**Disclaimer: Prices were given as of 16th April 2025.**
-
+---
 
 ## Critical Recommendations & Best Practices
 
@@ -948,6 +942,4 @@ Guidelines for contributing to PetroDoc AI:
 ##
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-[def]: #summary-table
+Copyright © 2025 · Right-Click Solutions · All Rights Reserved
