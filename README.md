@@ -47,6 +47,7 @@ This system comprises two core Python modules:
 * [Key Features](#key-features)
 * [Technology Stack & Rationale](#technology-stack--rationale)
   * [Core Technologies](#core-technologies)
+  * [Architectural Diagram](#architectural-diagram)
   * [Architectural Decisions](#architectural-decisions)
   * [API Selection Rationale](#api-selection-rationale)
 * [Installation & Setup](#installation--setup)
@@ -145,6 +146,98 @@ This project leverages a carefully selected stack to balance performance, accura
   * **Redis:** High-performance in-memory cache and message broker.
   * **Celery:** Distributed task queue for asynchronous background processing.
   * **AWS S3:** Cloud object storage service.
+
+### Architecture Diagram
+```mermaid
+graph TD
+
+%% STAGE 1: TRIGGER
+subgraph Trigger
+  A[Upload Complete Trigger + S3 Prefix]
+end
+
+A --> AA
+
+%% STAGE 2: CALLBACK & FILE LISTING
+subgraph ProcessingCallback
+  direction TB
+  AA["List Files\nin S3 Prefix"]
+  AA --> AB{"Process\nFiles\nConcurrently"}
+end
+
+%% STAGE 3: FILE DOWNLOAD
+subgraph File_Download_and_Preparation
+  AB --> AC[Download File from S3]
+  AC --> AD[Create Temp Local File Path]
+end
+
+AC --> S3[AWS S3 Bucket]
+
+%% STAGE 4: FILE PARSING
+subgraph File_Parsing
+  direction TB
+  AD --> P1["PDF/TIF Parser → Google Vision API,\nPyMuPDF"]
+  AD --> P2["LAS/SEGY/DLIS/PDS Parser → lasio,\ndlisio,\nsegyio"]
+  AD --> P3["DOC/DOCX Parser → Google Docs API,\nAntiword"]
+  AD --> P4["XLS/XLSX/CSV/TXT Parser → pandas,\nxlrd"]
+  AD --> P5[PPT/PPTX Parser → google Docs API,\nCatdoc, \npython-pptx]
+
+  P1 --> E[Extracted Text]
+  P2 --> E
+  P3 --> E
+  P4 --> E
+  P5 --> E
+end
+
+%% STAGE 5: ANALYSIS
+subgraph OilGasDocumentAnalyzer
+  E --> B[Analyzer Entry Point]
+  B --> F[Core Analysis Logic]
+
+  F --> G[Gemini Model]
+  G --> G1["Extraction:\nWells, Fields, Concepts"]
+  G --> G2[Categorization]
+  G --> G3[Summarization]
+
+  F --> H[ChromaDB Vector Store]
+  H --> H1[RAG Categorization]
+  H --> H2[Well/Field Verification]
+
+  F --> I[Pickle Cache]
+  F --> J[Final Analysis Results]
+end
+
+%% STAGE 6: POST-PROCESSING
+subgraph Cleanup_and_Callback
+  J --> AB
+  AB --> K[Delete Temp File]
+  AB --> L[Delete S3 Object]
+  AB --> M[Cleanup S3 Prefix]
+
+  L --> S3
+  M --> S3
+end
+
+%% STAGE 7: OUTPUT
+subgraph Output
+  J --> N[UI Table / CSV / JSON Output]
+end
+
+%% STYLING
+style Trigger fill:#f0f0f0,stroke:#444,stroke-width:2px
+style ProcessingCallback fill:#ffe4b2,stroke:#444,stroke-width:2px
+style File_Download_and_Preparation fill:#fff4cc,stroke:#444,stroke-width:2px
+style File_Parsing fill:#d8e8ff,stroke:#444,stroke-width:2px
+style OilGasDocumentAnalyzer fill:#cce5ff,stroke:#444,stroke-width:2px
+style Cleanup_and_Callback fill:#ffe4b2,stroke:#444,stroke-width:2px
+style Output fill:#c2f0c2,stroke:#444,stroke-width:2px
+
+style S3 fill:#FFB347,stroke:#333,stroke-width:2px
+style G fill:#f9f,stroke:#333,stroke-width:2px
+style H fill:#ccf,stroke:#333,stroke-width:2px
+style I fill:#eee,stroke:#333,stroke-width:2px
+
+```
 
 ### Architectural Decisions
 
@@ -277,7 +370,7 @@ The `OilGasDocumentAnalyzer` uses the `google-generativeai` Python library to in
 
 <p align="center">
   <a href="https://console.cloud.google.com/apis/credentials">
-    <img src="image-70.png" alt="Example API Key Generation in Google AI Studio" width="600">
+    <img src="image\image-70.png"" alt="Example API Key Generation in Google AI Studio" width="600">
   </a>
   <br/><em>(Illustrative example of API key generation interface in Google AI Studio)</em>
 </p>
