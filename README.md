@@ -47,7 +47,7 @@ This system comprises two core Python modules:
 * [Key Features](#key-features)
 * [Technology Stack & Rationale](#technology-stack--rationale)
   * [Core Technologies](#core-technologies)
-  * [Architectural Diagram](#architectural-diagram)
+  * [Architecture Diagram](#architectural-diagram)
   * [Architectural Decisions](#architectural-decisions)
   * [API Selection Rationale](#api-selection-rationale)
 * [Installation & Setup](#installation--setup)
